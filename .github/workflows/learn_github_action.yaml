@@ -15,25 +15,25 @@ jobs:
         python-version: "3.10"
     - name: Install dependencies
       run: pytest
-build:
-  needs: [run-test-code]
-  runs-on: ubuntu-latest
-  steps:
-  - name: Checkout
-    uses: actions/checkout@v3
-  - name: Set up Python 3.10
-    uses: actions/setup-python@v4
-    with:
-      python-version: '3.10'
-  - name: Install dependencies
-    run: pip install -r requirements.txt
-  - name: Login to DockerHub
-    uses: docker/login-action@v1
-    with:
-      username: ${{secrets.DOCKERHUB_USERNAME}}
-      password: ${{secrets.DOCKERHUB_TOKEN}}
-  - name: build and release to DockerHub
-    run: |
-      docker build -t ${{secrets.DOCKERHUB_REPO}} .
-      docker tag ${{ secrets.DOCKERHUB_REPO }}:latest ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:latest
-      docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:latest
+  build:
+    needs: [run-test-code]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{secrets.DOCKERHUB_USERNAME}}
+        password: ${{secrets.DOCKERHUB_TOKEN}}
+    - name: build and release to DockerHub
+      run: |
+        docker build -t ${{secrets.DOCKERHUB_REPO}} .
+        docker tag ${{ secrets.DOCKERHUB_REPO }}:latest ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:latest
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:latest
